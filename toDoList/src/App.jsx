@@ -1,11 +1,11 @@
-import { useState } from 'react'
+//import { useState } from 'react'
 //import reactLogo from './assets/react.svg'
 
 import './App.css'
 import List from './components/list'
 
 function App() {
-  const [count, setCount] = useState();
+  //const [count, setCount] = useState();
 
   return (
     <>
