@@ -12,7 +12,7 @@ const ModalAdd = ({active, setActive}) => {
             <input type="text" className="shadow-md w-96 p-2 mb-2 rounded-md"/>
             <h4 className="text-left">Текст</h4>
             <textarea className="shadow-md w-full h-48 p-2 mb-6 rounded-md" name="description" id="description"></textarea>
-            <button className="w-full bg-green-500 text-slate-50 text-2xl text-center">+</button>
+            <button className="shadow-md w-full bg-green-500 text-slate-50 text-2xl text-center">+</button>
           </div>
         </div>
       </div>
