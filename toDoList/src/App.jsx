@@ -2,11 +2,12 @@ import React from 'react'
 //import reactLogo from './assets/react.svg'
 
 import './App.css'
-import List from './components/list'
 import ModalAdd from './components/modalAdd'
+import List from './components/list'
 
 function App() {
-  const [modalAddACtive, SetModalAddActive] = React.useState(true); // Модальное окно
+  
+  const [modalAddACtive, SetModalAddActive] = React.useState(false); // Модальное окно
 
   return (
     <>
@@ -16,7 +17,7 @@ function App() {
 
           <header className='header flex justify-center items-center relative mb-8'>
             
-            <button onClick={SetModalAddActive(true)} className="header__button_add p-0 border-none absolute top-0 left-4">
+            <button onClick={() => SetModalAddActive(true)} className="header__button_add p-0 border-none absolute top-0 left-4">
                 <img src="./btn-add.svg" className='w-10 h-10' alt="" />
             </button>
 
