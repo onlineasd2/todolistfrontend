@@ -8,21 +8,21 @@ import List from './components/list'
 function App() {
 
   const [modalAddActive, SetModalAddActive] = React.useState(false); // Модальное окно
-  const [taskTitle, setTaskTitle] = React.useState('');
-  const [taskDescription, setTaskDescription] = React.useState('');
-  const [tasks, setTasks] = React.useState([]);
+  const [taskTitle, setTaskTitle] = React.useState('');  // Поле заголовка в модальном окне
+  const [taskDescription, setTaskDescription] = React.useState(''); // Поле описания в модальном окне
+  const [tasks, setTasks] = React.useState([]); // Подгрузка задач с сервера
   const [isSubmitAdd, setIsSubmitAdd] = React.useState(false); // Состояние для блокировки повторной отправки
 
-  // Загружаем задачи при загрузке компонента
+  // Загружаем задачи при загрузке страницы один раз
   React.useEffect(() => {
-    FetchTask();
+    FetchTask(); // Функция для загрузки задач GET запрос
   }, []);
 
-  // Функция для загрузки задач
+  // Функция для загрузки задач GET запрос
   const FetchTask = async () => {
     try {
         const response = await axios.get("https://671796f7b910c6a6e0290314.mockapi.io/tasks");
-        setTasks(response.data);
+        setTasks(response.data); // Добавляем задачу визуально на страницу
     } catch (error) {
       console.error("Ошибка при загрузке задач:", error);
     }
@@ -38,9 +38,9 @@ function App() {
         description: taskDescription // отправляем из формы в post запрос json
       });
       console.log('Задача добавлена:', response.data);
-      setTaskTitle('');
-      setTaskDescription('');
-      FetchTask();
+      setTaskTitle(''); // Очищаем заголовок
+      setTaskDescription(''); // Очищаем описание
+      FetchTask(); // Функция для загрузки задач GET запрос
       SetModalAddActive(false); // Закрываем модальное окно после отправки
     } catch (error) {
       console.error('Ошибка при добавлении задачи:', error);
@@ -70,7 +70,7 @@ function App() {
           onChange={(e) => setTaskDescription(e.target.value)} 
         />
         <button 
-          onClick={handleAddTask}
+          onClick={handleAddTask} // Отправка Post запроса из формы
           disabled={isSubmitAdd} // Делаем кнопку неактивной, если идет отправка запроса
           className="shadow-md w-full bg-green-500 text-slate-50 text-2xl text-center">
           {isSubmitAdd ? 'Отправка...' : '+'} </button>
@@ -91,7 +91,7 @@ function App() {
               <h2 className='text-4xl font-bold'>Список Задач</h2>
             </div>            
           </header>
-          <List tasks={tasks}/>
+          <List tasks={tasks}/> {/* Отправка Post запроса из формы */}
 
         </section>
       </main>
