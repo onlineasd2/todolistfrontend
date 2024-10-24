@@ -4,7 +4,7 @@
 
 //import axios from "axios"
 
-function List({ tasks }) {
+function List({ tasks, onDelete }) {
 
   return (
     <>
@@ -17,7 +17,12 @@ function List({ tasks }) {
                 </div>
                 <div className="list__buttons flex">
                     <button className='list__button-edit w-20 bg-transparent'><img src="./btn-edit.svg" /></button>
-                    <button className='list__button-delete w-20 bg-transparent'><img src="./btn-delete.svg" /></button>
+                    <button 
+                        onClick={() => onDelete(task.id)} // Удаляем задачу при нажатии
+                        className='list__button-delete w-20 bg-transparent'>
+                            <img 
+                                src="./btn-delete.svg" />
+                    </button>
                 </div>
             </div>
             ))}

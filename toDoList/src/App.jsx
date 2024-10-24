@@ -49,6 +49,16 @@ function App() {
     }
   };
 
+    // Функция для удаления задачи
+    const handleDeleteTask = async (taskId) => {
+      try {
+        await axios.delete(`https://671796f7b910c6a6e0290314.mockapi.io/tasks/${taskId}`);
+        setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId)); // Удаляем задачу из состояния
+      } catch (error) {
+        console.error('Ошибка при удалении задачи:', error);
+      }
+    };
+
 
   return (
     <>
@@ -91,7 +101,7 @@ function App() {
               <h2 className='text-4xl font-bold'>Список Задач</h2>
             </div>            
           </header>
-          <List tasks={tasks}/> {/* Отправка Post запроса из формы */}
+          <List tasks={tasks} onDelete={handleDeleteTask}/> {/* Отправка Post запроса из формы */}
 
         </section>
       </main>
