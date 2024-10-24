@@ -14,15 +14,17 @@ function App() {
   const [isSubmitAdd, setIsSubmitAdd] = React.useState(false); // Состояние для блокировки повторной отправки
   const [editTaskId, setEditTaskId] = React.useState(null); // ID редактируемой задачи
   const [modalEditActive, setModalEditActive] = React.useState(false); // Модальное окно для редактирования
+  const [modalDeleteActive, setModalDeleteActive] = React.useState(false); // Модальное окно для удаления
+  const [isSubmitDelete, setIsSubmitDelete] = React.useState(false); // Состояние для блокировки повторной отправки
 
 
   // Загружаем задачи при загрузке страницы один раз
   React.useEffect(() => {
-    FetchTask(); // Функция для загрузки задач GET запрос
+    GetUpdateTasks(); // Функция для загрузки задач GET запрос
   }, []);
 
   // Функция для загрузки задач GET запрос
-  const FetchTask = async () => {
+  const GetUpdateTasks = async () => {
     try {
         const response = await axios.get("https://671796f7b910c6a6e0290314.mockapi.io/tasks");
         setTasks(response.data); // Добавляем задачу визуально на страницу
@@ -32,7 +34,7 @@ function App() {
   }
 
   // Отправка Post запроса из формы
-  const handleAddTask = async () => {
+  const ClickAddTask = async () => {
     if (isSubmitAdd) return; // Если запрос уже выполняется, блокируем повторную отправку
     setIsSubmitAdd(true); // Устанавливаем флаг отправки в true
     try {
@@ -43,7 +45,7 @@ function App() {
       console.log('Задача добавлена:', response.data);
       setTaskTitle(''); // Очищаем заголовок
       setTaskDescription(''); // Очищаем описание
-      FetchTask(); // Функция для загрузки задач GET запрос
+      GetUpdateTasks(); // Функция для загрузки задач GET запрос
       SetModalAddActive(false); // Закрываем модальное окно после отправки
     } catch (error) {
       console.error('Ошибка при добавлении задачи:', error);
@@ -53,17 +55,26 @@ function App() {
   };
 
     // Функция для удаления задачи
-    const handleDeleteTask = async (taskId) => {
+    const DeleteTask = async (taskId) => {
       try {
         await axios.delete(`https://671796f7b910c6a6e0290314.mockapi.io/tasks/${taskId}`);
         setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId)); // Удаляем задачу из состояния
       } catch (error) {
         console.error('Ошибка при удалении задачи:', error);
+      } finally {
+        setModalDeleteActive(false)
       }
     };
 
+    const ClickDeleteTask = () => {
+      //setIsSubmitDelete(true)
+      // if(isSubmitDelete) {
+      //   DeleteTask();
+      // }
+    }
+
     // Функция для открытия модального окна редактирования и загрузки текущих данных задачи
-    const handleEditClick = (task) => {
+    const ClickEditClick = (task) => {
       setTaskTitle(task.title);
       setTaskDescription(task.description);
       setEditTaskId(task.id); // Сохраняем ID редактируемой задачи
@@ -71,7 +82,7 @@ function App() {
     };
 
     // Функция для редактирования задачи
-    const handleEditTask = async () => {
+    const ClickEditTask = async () => {
       if (isSubmitAdd) return;
       setIsSubmitAdd(true);
       try {
@@ -83,7 +94,7 @@ function App() {
         setTaskTitle('');
         setTaskDescription('');
         setModalEditActive(false);
-        FetchTask(); // Перезагружаем задачи для обновления списка
+        GetUpdateTasks(); // Перезагружаем задачи для обновления списка
       } catch (error) {
         console.error('Ошибка при редактировании задачи:', error);
       } finally {
@@ -93,6 +104,12 @@ function App() {
 
   return (
     <>
+      <Modal active={modalDeleteActive} setActive={SetModalAddActive}>
+        <button  onClick={() => setModalDeleteActive(false)} className="absolute top-0 right-0 bg-white">X</button>
+        <h3 className='text-2xl font-bold mb-6'>Вы уверены что хотите удалить задачу ?</h3>
+        <button onClick={() => setIsSubmitDelete(true)} className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'>X</button>
+      </Modal>
+
       <Modal active={modalAddActive} setActive={SetModalAddActive}>
         <h2 className="text-center text-2xl font-bold pb-6 ">Добавить задачу</h2>
         <h4 className="text-left">Заголовок</h4>
@@ -111,7 +128,7 @@ function App() {
           onChange={(e) => setTaskDescription(e.target.value)} 
         />
         <button 
-          onClick={handleAddTask} // Отправка Post запроса из формы
+          onClick={ClickAddTask} // Отправка Post запроса из формы
           disabled={isSubmitAdd} // Делаем кнопку неактивной, если идет отправка запроса
           className="shadow-md w-full bg-green-500 text-slate-50 text-2xl text-center">
           {isSubmitAdd ? 'Отправка...' : '+'} </button>
@@ -135,7 +152,7 @@ function App() {
         />
         <button
           className="shadow-md w-full bg-blue-500 text-slate-50 text-2xl text-center"
-          onClick={handleEditTask}
+          onClick={ClickEditTask}
           disabled={isSubmitAdd} // Делаем кнопку неактивной при отправке
         >
           {isSubmitAdd ? 'Сохранение...' : 'Сохранить'} {/* Меняем текст кнопки в зависимости от состояния отправки */}
@@ -156,7 +173,7 @@ function App() {
               <h2 className='text-4xl font-bold'>Список Задач</h2>
             </div>            
           </header>
-          <List tasks={tasks} onDelete={handleDeleteTask} onEdit={handleEditClick} /> {/* Отправка Post запроса из формы */}
+          <List tasks={tasks} onDelete={ClickDeleteTask} onEdit={ClickEditClick} /> {/* Отправка Post запроса из формы */}
 
         </section>
       </main>
