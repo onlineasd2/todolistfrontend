@@ -15,7 +15,6 @@ function App() {
   const [editTaskId, setEditTaskId] = React.useState(null); // ID редактируемой задачи
   const [modalEditActive, setModalEditActive] = React.useState(false); // Модальное окно для редактирования
   const [modalDeleteActive, setModalDeleteActive] = React.useState(false); // Модальное окно для удаления
-  //const [isSubmitDelete, setIsSubmitDelete] = React.useState(false); // Состояние для блокировки повторной отправки
   const [taskToDelete, setTaskToDelete] = React.useState(null); // Состояние для хранения ID задачи для удаления
 
 
@@ -57,6 +56,8 @@ function App() {
 
     // Функция для удаления задачи
     const DeleteTask = async (taskId) => {
+      if (isSubmitAdd) return;
+      setIsSubmitAdd(true);
       try {
         await axios.delete(`https://671796f7b910c6a6e0290314.mockapi.io/tasks/${taskId}`);
         setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId)); // Удаляем задачу из состояния
@@ -65,11 +66,13 @@ function App() {
       } finally {
         setModalDeleteActive(false); // Закрываем модальное окно
         setTaskToDelete(null); // Сбрасываем ID задачи для удаления
+        setIsSubmitAdd(false);
       }
     };
 
     // Функция, которая открывает модальное окно для удаления
     const handleDeleteClick = (taskId) => {
+      console.log(taskId);
       setTaskToDelete(taskId); // Сохраняем ID задачи для удаления
       setModalDeleteActive(true); // Открываем модальное окно
     };
@@ -113,7 +116,11 @@ function App() {
       <Modal active={modalDeleteActive} setActive={SetModalAddActive}>
         <button  onClick={() => setModalDeleteActive(false)} className="absolute top-0 right-0 bg-white">X</button>
         <h3 className='text-2xl font-bold mb-6'>Вы уверены что хотите удалить задачу ?</h3>
-        <button onClick={ClickDeleteTask} className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'>X</button>
+        <button 
+          disabled={isSubmitAdd} 
+          onClick={ClickDeleteTask} 
+          className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'>
+            {isSubmitAdd ? 'Удаление...' : 'Удалить'}</button>
       </Modal>
 
       <Modal active={modalAddActive} setActive={SetModalAddActive}>
