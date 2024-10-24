@@ -15,7 +15,8 @@ function App() {
   const [editTaskId, setEditTaskId] = React.useState(null); // ID редактируемой задачи
   const [modalEditActive, setModalEditActive] = React.useState(false); // Модальное окно для редактирования
   const [modalDeleteActive, setModalDeleteActive] = React.useState(false); // Модальное окно для удаления
-  const [isSubmitDelete, setIsSubmitDelete] = React.useState(false); // Состояние для блокировки повторной отправки
+  //const [isSubmitDelete, setIsSubmitDelete] = React.useState(false); // Состояние для блокировки повторной отправки
+  const [taskToDelete, setTaskToDelete] = React.useState(null); // Состояние для хранения ID задачи для удаления
 
 
   // Загружаем задачи при загрузке страницы один раз
@@ -62,17 +63,22 @@ function App() {
       } catch (error) {
         console.error('Ошибка при удалении задачи:', error);
       } finally {
-        setModalDeleteActive(false)
+        setModalDeleteActive(false); // Закрываем модальное окно
+        setTaskToDelete(null); // Сбрасываем ID задачи для удаления
       }
     };
 
-    const ClickDeleteTask = () => {
-      //setIsSubmitDelete(true)
-      // if(isSubmitDelete) {
-      //   DeleteTask();
-      // }
-    }
+    // Функция, которая открывает модальное окно для удаления
+    const handleDeleteClick = (taskId) => {
+      setTaskToDelete(taskId); // Сохраняем ID задачи для удаления
+      setModalDeleteActive(true); // Открываем модальное окно
+    };
 
+    const ClickDeleteTask = () => {
+      if (taskToDelete) {
+        DeleteTask(taskToDelete); // Удаляем задачу с установленным ID
+      }
+    }
     // Функция для открытия модального окна редактирования и загрузки текущих данных задачи
     const ClickEditClick = (task) => {
       setTaskTitle(task.title);
@@ -107,7 +113,7 @@ function App() {
       <Modal active={modalDeleteActive} setActive={SetModalAddActive}>
         <button  onClick={() => setModalDeleteActive(false)} className="absolute top-0 right-0 bg-white">X</button>
         <h3 className='text-2xl font-bold mb-6'>Вы уверены что хотите удалить задачу ?</h3>
-        <button onClick={() => setIsSubmitDelete(true)} className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'>X</button>
+        <button onClick={ClickDeleteTask} className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'>X</button>
       </Modal>
 
       <Modal active={modalAddActive} setActive={SetModalAddActive}>
@@ -173,7 +179,7 @@ function App() {
               <h2 className='text-4xl font-bold'>Список Задач</h2>
             </div>            
           </header>
-          <List tasks={tasks} onDelete={ClickDeleteTask} onEdit={ClickEditClick} /> {/* Отправка Post запроса из формы */}
+          <List tasks={tasks} onDelete={handleDeleteClick} onEdit={ClickEditClick} /> {/* Отправка Post запроса из формы */}
 
         </section>
       </main>
