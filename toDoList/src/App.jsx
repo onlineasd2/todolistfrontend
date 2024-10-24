@@ -1,17 +1,82 @@
 import React from 'react'
 //import reactLogo from './assets/react.svg'
-
+import axios from "axios"
 import './App.css'
-import ModalAdd from './components/modalAdd'
+import Modal from './components/modal'
 import List from './components/list'
 
 function App() {
-  
-  const [modalAddACtive, SetModalAddActive] = React.useState(false); // Модальное окно
+
+  const [modalAddActive, SetModalAddActive] = React.useState(false); // Модальное окно
+  const [taskTitle, setTaskTitle] = React.useState('');
+  const [taskDescription, setTaskDescription] = React.useState('');
+  const [tasks, setTasks] = React.useState([]);
+  const [isSubmitAdd, setIsSubmitAdd] = React.useState(false); // Состояние для блокировки повторной отправки
+
+  // Загружаем задачи при загрузке компонента
+  React.useEffect(() => {
+    FetchTask();
+  }, []);
+
+  // Функция для загрузки задач
+  const FetchTask = async () => {
+    try {
+        const response = await axios.get("https://671796f7b910c6a6e0290314.mockapi.io/tasks");
+        setTasks(response.data);
+    } catch (error) {
+      console.error("Ошибка при загрузке задач:", error);
+    }
+  }
+
+  // Отправка Post запроса из формы
+  const handleAddTask = async () => {
+    if (isSubmitAdd) return; // Если запрос уже выполняется, блокируем повторную отправку
+    setIsSubmitAdd(true); // Устанавливаем флаг отправки в true
+    try {
+      const response = await axios.post("https://671796f7b910c6a6e0290314.mockapi.io/tasks", {
+        title: taskTitle, // отправляем из формы в post запрос json
+        description: taskDescription // отправляем из формы в post запрос json
+      });
+      console.log('Задача добавлена:', response.data);
+      setTaskTitle('');
+      setTaskDescription('');
+      FetchTask();
+      SetModalAddActive(false); // Закрываем модальное окно после отправки
+    } catch (error) {
+      console.error('Ошибка при добавлении задачи:', error);
+    } finally {
+      setIsSubmitAdd(false); // Снимаем флаг отправки после завершения запроса
+    }
+  };
+
 
   return (
     <>
-      <ModalAdd active={modalAddACtive} setActive={SetModalAddActive}/>
+      <Modal active={modalAddActive} setActive={SetModalAddActive}>
+        <h2 className="text-center text-2xl font-bold pb-6 ">Добавить задачу</h2>
+        <h4 className="text-left">Заголовок</h4>
+        <input 
+          type="text" 
+          className="shadow-md w-96 p-2 mb-2 rounded-md" 
+          value={taskTitle} // используем здесь переменную
+          onChange={(e) => setTaskTitle(e.target.value)} 
+        />
+        <h4 className="text-left">Текст</h4>
+        <textarea
+          className="shadow-md w-full h-48 p-2 mb-6 rounded-md"
+          name="description"
+          id="description"
+          value={taskDescription} // используем здесь переменную
+          onChange={(e) => setTaskDescription(e.target.value)} 
+        />
+        <button 
+          onClick={handleAddTask}
+          disabled={isSubmitAdd} // Делаем кнопку неактивной, если идет отправка запроса
+          className="shadow-md w-full bg-green-500 text-slate-50 text-2xl text-center">
+          {isSubmitAdd ? 'Отправка...' : '+'} </button>
+          
+      </Modal>
+
       <main>
         <section className="section p-12">
 
@@ -26,12 +91,14 @@ function App() {
               <h2 className='text-4xl font-bold'>Список Задач</h2>
             </div>            
           </header>
-          <List/>
+          <List tasks={tasks}/>
 
         </section>
       </main>
     </>
   )
 }
+  
+
 
 export default App

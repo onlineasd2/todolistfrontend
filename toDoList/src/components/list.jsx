@@ -1,17 +1,10 @@
-import React from 'react'
+// import React from 'react'
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 
-import axios from "axios"
+//import axios from "axios"
 
-function List() {
-    const [tasks, setTasks] = React.useState();
-    React.useEffect(() => {
-        axios.get("https://671796f7b910c6a6e0290314.mockapi.io/tasks").then((res) => {
-            setTasks(res.data);
-            console.log(res.data);
-        });
-    }, []);
+function List({ tasks }) {
 
   return (
     <>
