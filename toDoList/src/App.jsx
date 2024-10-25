@@ -1,7 +1,7 @@
 import React from 'react'
-//import reactLogo from './assets/react.svg'
 import axios from "axios"
-import './App.css'
+import './App.css' 
+
 import Modal from './components/modal'
 import List from './components/list'
 
@@ -112,88 +112,108 @@ function App() {
     };
 
   return (
-    <>
-      <Modal active={modalDeleteActive} setActive={SetModalAddActive}>
-        <button  onClick={() => setModalDeleteActive(false)} className="absolute top-0 right-0 bg-white">X</button>
-        <h3 className='text-2xl font-bold mb-6'>Вы уверены что хотите удалить задачу ?</h3>
-        <button 
-          disabled={isSubmitAdd} 
-          onClick={ClickDeleteTask} 
-          className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'>
-            {isSubmitAdd ? 'Удаление...' : 'Удалить'}</button>
-      </Modal>
+		<>
+			<Modal active={modalDeleteActive} setActive={SetModalAddActive}>
+				<button
+					onClick={() => setModalDeleteActive(false)}
+					className='absolute top-0 right-0 bg-white'
+				>
+					X
+				</button>
+				<h3 className='text-2xl font-bold mb-6'>
+					Вы уверены что хотите удалить задачу ?
+				</h3>
+				<button
+					disabled={isSubmitAdd}
+					onClick={ClickDeleteTask}
+					className='delete-button bg-red-600 w-full p-4 rounded-lg text-white'
+				>
+					{isSubmitAdd ? 'Удаление...' : 'Удалить'}
+				</button>
+			</Modal>
 
-      <Modal active={modalAddActive} setActive={SetModalAddActive}>
-        <h2 className="text-center text-2xl font-bold pb-6 ">Добавить задачу</h2>
-        <h4 className="text-left">Заголовок</h4>
-        <input 
-          type="text" 
-          className="shadow-md w-96 p-2 mb-2 rounded-md" 
-          value={taskTitle} // используем здесь переменную
-          onChange={(e) => setTaskTitle(e.target.value)} 
-        />
-        <h4 className="text-left">Текст</h4>
-        <textarea
-          className="shadow-md w-full h-48 p-2 mb-6 rounded-md"
-          name="description"
-          id="description"
-          value={taskDescription} // используем здесь переменную
-          onChange={(e) => setTaskDescription(e.target.value)} 
-        />
-        <button 
-          onClick={ClickAddTask} // Отправка Post запроса из формы
-          disabled={isSubmitAdd} // Делаем кнопку неактивной, если идет отправка запроса
-          className="shadow-md w-full bg-green-500 text-slate-50 text-2xl text-center">
-          {isSubmitAdd ? 'Отправка...' : '+'} </button>
-      </Modal>
+			<Modal active={modalAddActive} setActive={SetModalAddActive}>
+				<h2 className='text-center text-2xl font-bold pb-6 '>
+					Добавить задачу
+				</h2>
+				<h4 className='text-left'>Заголовок</h4>
+				<input
+					type='text'
+					className='shadow-md w-96 p-2 mb-2 rounded-md'
+					value={taskTitle} // используем здесь переменную
+					onChange={e => setTaskTitle(e.target.value)}
+				/>
+				<h4 className='text-left'>Текст</h4>
+				<textarea
+					className='shadow-md w-full h-48 p-2 mb-6 rounded-md'
+					name='description'
+					id='description'
+					value={taskDescription} // используем здесь переменную
+					onChange={e => setTaskDescription(e.target.value)}
+				/>
+				<button
+					onClick={ClickAddTask} // Отправка Post запроса из формы
+					disabled={isSubmitAdd} // Делаем кнопку неактивной, если идет отправка запроса
+					className='shadow-md w-full bg-green-500 text-slate-50 text-2xl text-center'
+				>
+					{isSubmitAdd ? 'Отправка...' : '+'}{' '}
+				</button>
+			</Modal>
 
-      {/* Модальное окно для редактирования задачи */}
-      <Modal active={modalEditActive} setActive={setModalEditActive}>
-        <h2 className="text-center text-2xl font-bold pb-6">Редактировать задачу</h2>
-        <h4 className="text-left">Заголовок</h4>
-        <input
-          type="text"
-          className="shadow-md w-96 p-2 mb-2 rounded-md"
-          value={taskTitle}
-          onChange={(e) => setTaskTitle(e.target.value)}
-        />
-        <h4 className="text-left">Текст</h4>
-        <textarea
-          className="shadow-md w-full h-48 p-2 mb-6 rounded-md"
-          value={taskDescription}
-          onChange={(e) => setTaskDescription(e.target.value)}
-        />
-        <button
-          className="shadow-md w-full bg-blue-500 text-slate-50 text-2xl text-center"
-          onClick={ClickEditTask}
-          disabled={isSubmitAdd} // Делаем кнопку неактивной при отправке
-        >
-          {isSubmitAdd ? 'Сохранение...' : 'Сохранить'} {/* Меняем текст кнопки в зависимости от состояния отправки */}
-        </button>
-      </Modal>
+			{/* Модальное окно для редактирования задачи */}
+			<Modal active={modalEditActive} setActive={setModalEditActive}>
+				<h2 className='text-center text-2xl font-bold pb-6'>
+					Редактировать задачу
+				</h2>
+				<h4 className='text-left'>Заголовок</h4>
+				<input
+					type='text'
+					className='shadow-md w-96 p-2 mb-2 rounded-md'
+					value={taskTitle}
+					onChange={e => setTaskTitle(e.target.value)}
+				/>
+				<h4 className='text-left'>Текст</h4>
+				<textarea
+					className='shadow-md w-full h-48 p-2 mb-6 rounded-md'
+					value={taskDescription}
+					onChange={e => setTaskDescription(e.target.value)}
+				/>
+				<button
+					className='shadow-md w-full bg-blue-500 text-slate-50 text-2xl text-center'
+					onClick={ClickEditTask}
+					disabled={isSubmitAdd} // Делаем кнопку неактивной при отправке
+				>
+					{isSubmitAdd ? 'Сохранение...' : 'Сохранить'}{' '}
+					{/* Меняем текст кнопки в зависимости от состояния отправки */}
+				</button>
+			</Modal>
 
-      <main>
-        <section className="section p-12">
+			<main>
+				<section className='section p-12'>
+					<header className='header flex justify-center items-center relative mb-8'>
+						<button
+							onClick={() => SetModalAddActive(true)}
+							className='header__button_add p-0 border-none absolute top-0 left-4'
+						>
+							<img src='./btn-add.svg' className='w-10 h-10' alt='' />
+						</button>
 
-          <header className='header flex justify-center items-center relative mb-8'>
-            
-            <button onClick={() => SetModalAddActive(true)} className="header__button_add p-0 border-none absolute top-0 left-4">
-                <img src="./btn-add.svg" className='w-10 h-10' alt="" />
-            </button>
-
-            <div className="title flex flex-col justify-center items-center">
-              <img className='w-12 h-12' src="./rocket-lunch.svg" alt="" />
-              <h2 className='text-4xl font-bold'>Список Задач</h2>
-            </div>            
-          </header>
-          <List tasks={tasks} onDelete={handleDeleteClick} onEdit={ClickEditClick} /> {/* Отправка Post запроса из формы */}
-
-        </section>
-      </main>
-    </>
-  )
+						<div className='title flex flex-col justify-center items-center'>
+							<img className='w-12 h-12' src='./rocket-lunch.svg' alt='' />
+							<h2 className='text-4xl font-bold'>Список Задач</h2>
+						</div>
+					</header>
+					<List
+						tasks={tasks}
+						onDelete={handleDeleteClick}
+						onEdit={ClickEditClick}
+					/>
+					{/* Отправка Post запроса из формы */}
+				</section>
+			</main>
+		</>
+	)
 }
-  
 
 
 export default App
