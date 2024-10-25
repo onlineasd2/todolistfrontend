@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, HistoryRouter } from 'react-dom/client'
 import App from './App.jsx'
 import TaskDetail from './Task.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -23,6 +23,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
-		<RouterProvider router={router} basename={'/todolistfrontend/'} />
+		<HistoryRouter basename={'/todolistfrontend/'}>
+			<RouterProvider router={router} />
+		</HistoryRouter>
 	</StrictMode>
 )
