@@ -23,6 +23,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
-		<RouterProvider router={router} basename={'/todolistfrontend/'} />
+		<RouterProvider router={router} basename='/todolistfrontend/' />
 	</StrictMode>
 )
