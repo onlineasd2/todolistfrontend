@@ -19,8 +19,8 @@ const router = createBrowserRouter([
 		path: '/task/:taskid',
 		element: <TaskDetail />,
 	},
-	{ basename: '/todolistfrontend/' },
-])
+],
+	{ basename: '/todolistfrontend/' },)
 
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
